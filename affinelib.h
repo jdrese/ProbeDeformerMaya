@@ -28,9 +28,11 @@
 
 #include <cmath>
 #include <iostream>
-#include <cassert>
 #include <vector>
 
+// disable assert lines
+#define NDEBUG
+#include <cassert>
 
 /// threshold for small values to be regarded zero
 #define EPSILON 10e-15
@@ -99,7 +101,7 @@ namespace AffineLib{
         return X.angle() * A;
     }
 
-    Matrix3d logSOc(const Matrix3d& m, const Matrix3d& P)
+    Matrix3d logSOc(const Matrix3d& m, const Matrix3d& P = Matrix3d::Zero())
     /** "Continuous" log for a rotational matrix
      * @param m rotational matrix
      * @param P anti-symmetric matrix
@@ -550,6 +552,7 @@ namespace AffineLib{
         } while ((Prev-Curr).lpNorm<1>() > EPSILON*Prev.lpNorm<1>());
         R = Curr;
         S = m * Curr.transpose();
+        S = (S+S.transpose())/2;
         return iter;
     }
     

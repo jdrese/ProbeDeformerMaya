@@ -21,17 +21,8 @@
 #include <vector>
 #include <map>
 
+#include "deformerConst.h"
 
-// tetrahedra construction mode
-#define TM_NONE -1
-#define TM_FACE 0
-#define TM_EDGE 1
-#define TM_VERTEX 2
-#define TM_VFACE 10   // for each vertex and an adjacent face, make a tet by adding the face normal to the vertex
-
-
-/// threshold for being zero
-//#define EPSILON 10e-6
 
 using namespace Eigen;
 
@@ -201,7 +192,7 @@ namespace Tetrise{
     // comptute tetrahedra weights from those of points
     void makeTetWeightList(short tetMode, const std::vector<int>& tetList,
                    const std::vector<int>& faceList, const std::vector<edge>& edgeList,
-                   const std::vector<vertex>& vertexList, const std::vector<double>& ptsWeight,
+                   const std::vector<vertex>& vertexList, const VectorXd& ptsWeight,
                    std::vector<double>& tetWeight ){
         int numTet = (int)tetList.size()/4;
         tetWeight.resize(numTet);
@@ -356,7 +347,6 @@ namespace Tetrise{
     void makeAdjacencyList(short tetMode, const std::vector<int>& tetList,
             const std::vector<edge>& edgeList, const std::vector<vertex>& vertexList,
                            std::vector< std::vector<int> >& adjacencyList){
-        adjacencyList.clear();
         adjacencyList.resize(tetList.size()/4);
         for(int i=0;i<adjacencyList.size();i++){
             adjacencyList[i].clear();
@@ -497,44 +487,5 @@ namespace Tetrise{
                 tetCenter[i]=pts[tetList[4*i]];
             }
         }
-    }
-    
-    
-    /// compute distance between a line segment (ab) and a point p
-    double distPtLin(Vector3d p,Vector3d a,Vector3d b){
-        double t= (a-b).dot(p-b)/(a-b).squaredNorm();
-        if(t>1){
-            return (a-p).norm();
-        }else if(t<0){
-            return (b-p).norm();
-        }else{
-            return (t*(a-b)-(p-b)).norm();
-        }
-    }
-    
-    /// compute distance between a triangle (abc) and a point p
-    double distPtTri(Vector3d p, Vector3d a, Vector3d b, Vector3d c){
-        /// if p is in the outer half-space, it returns HUGE_VAL
-        double s[4];
-        Vector3d n=(b-a).cross(c-a);
-        if(n.squaredNorm()<EPSILON){
-            return (p-a).norm();
-        }
-        double k=n.dot(a-p);
-        if(k<0) return HUGE_VAL;
-        s[0]=distPtLin(p,a,b);
-        s[1]=distPtLin(p,b,c);
-        s[2]=distPtLin(p,c,a);
-        Matrix3d A;
-        A << b(0)-a(0), c(0)-a(0), n(0)-a(0),
-        b(1)-a(1), c(1)-a(1), n(1)-a(1),
-        b(2)-a(2), c(2)-a(2), n(2)-a(2);
-        Vector3d v = A.inverse()*(p-a);  // barycentric coordinate of p
-        if(v(0)>0 && v(1)>0 && v(0)+v(1)<1){
-            s[3]=k;
-        }else{
-            s[3] = HUGE_VAL;
-        }
-        return min(min(min(s[0],s[1]),s[2]),s[3]);
     }
 }

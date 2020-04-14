@@ -51,27 +51,17 @@
 #ifdef NT_PLUGIN
 #pragma comment (lib, "cg.lib")
 #pragma comment (lib, "cgGL.lib")
-#pragma comment (lib, "Cloth.lib")
 #pragma comment (lib, "Foundation.lib")
 #pragma comment (lib, "Image.lib")
 #pragma comment (lib, "IMFbase.lib")
-#pragma comment (lib, "libawxml2.lib")
-#pragma comment (lib, "libHalf.lib")
-#pragma comment (lib, "libIex.lib") // Link this always (2013 change). Otherwise: 4 missing symbols when linking
-#if !defined(_MANAGED)
-#pragma comment (lib, "libIlmImf.lib")
-#endif
-#pragma comment (lib, "libImath.lib")
+#pragma comment (lib, "awxml2.lib")
 #pragma comment (lib, "libmocap.lib")
-#pragma comment (lib, "libzlib.lib")
+#pragma comment (lib, "zlib.lib")
 #pragma comment (lib, "OpenMaya.lib")
 #pragma comment (lib, "OpenMayaAnim.lib")
 #pragma comment (lib, "OpenMayaFX.lib")
 #pragma comment (lib, "OpenMayaRender.lib")
 #pragma comment (lib, "OpenMayaUI.lib")
-#ifdef _PYTHON_MODULE_
-#pragma comment (lib, "python26.lib")
-#endif
 #pragma comment (lib, "tbb.lib")
 #pragma comment (lib, "tbbmalloc.lib")
 #endif

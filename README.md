@@ -24,21 +24,25 @@ http://link.springer.com/chapter/10.1007/978-4-431-55483-7_6?no-access=true
 - "A concise parametrisation of affine transformation" by S. Kaji and H. Ochiai, to appear in SIAM J. on Imaging Sciences, http://arxiv.org/abs/1507.05290
 
 # How to compile:
+- Get devkit at https://www.autodesk.com/developmaya
 - For Mac users, look at the included Xcode project file ( or Makefile )
-- For Windows users, look at the included Visual Studio project file.
-Please refer to Autodesk's web page for details.
+- For Windows users, look at the included Visual Studio project file. __DO NOT__ turn on AVX or you'll get an exception.
+- on some systems, specifying the compiler option -DEIGEN_DONT_VECTORIZE may be necessary to avoid compilation errors (thank giordi91 for this information)
 
 # How to use:
 1. Place the plugin files in "MAYA_PLUG_IN_PATH"
 2. Place the UI python script files in "MAYA_SCRIPT_PATH"
 3. Open Script editor in Maya and type in the following Python command:
 
-    import ui_probeDeformer as ui
-    ui.UI_ProbeDeformer()
+```python
+import ui_probeDeformer as ui
+ui.UI_ProbeDeformer()
+```
 
-
-To visualise vertex color, go to "Display" => "Polygon" => "Custom Polygon Display"
+- To visualise vertex color, go to "Display" => "Polygon" => "Custom Polygon Display"
 and tick "color" and select "emission."
+- Rendering locators uses OpenGL and the new Viewport disables it by default.
+Set MAYA_ENABLE_LEGACY_VIEWPORT in Maya.env and go to "Preferences" => "Display" => "Viewport 2.0" and choose "OpenGL - Legacy"
 
 # LIMITATION:
 The ARAP version works only on "clean" meshes.
